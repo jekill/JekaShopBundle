@@ -1,0 +1,8 @@
+<ul class="breadcrumb">
+    {% if category.ancestors%}
+        {% for ancestor in category.ancestors%}
+            <li><a href="{{path('shop_category',{'slug':ancestor.slug})}}">{{ancestor.name}}</a> <span class="divider">/</span></li>
+        {% endfor%}
+    {% endif%}
+    <li class="active"><a href="{{path('shop_category',{'slug':category.slug})}}">{{category.name}}</a></li>
+</ul>

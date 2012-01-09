@@ -1,0 +1,19 @@
+{% extends "DefaultBundle::layout.html.twig" %}
+
+{% block title %}
+    {{category.name}}
+{% endblock%}
+
+{% block content %}
+<div class="jk-category">
+{% include 'JekaShopBundle:Shop:_category_breadcrumb.html.twig' with {'category':category}%}
+<h1>{{category.name}}</h1>
+{% if children|length>0%}
+    <ul>
+    {% for child in children%}
+        <li><a href="{{path('shop_category',{'slug':child.slug})}}">{{child.name}}</a></li>
+    {% endfor%}
+    </ul>
+{% endif%}
+</div>
+{% endblock%}
