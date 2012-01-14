@@ -27,7 +27,6 @@ class ShopController extends Controller
     }
 
 
-
     /**
      * @Route("/to-cart", name="shop_to_cart")
      * @Template
@@ -43,12 +42,12 @@ class ShopController extends Controller
         $quantity = $req->get('quantity', 1);
         if ($quantity < 1) $quantity = 1;
 
-        if (!$product){
+        if (!$product) {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
         }
 
         /** @var $cart_manager  \Vespolina\CartBundle\Document\CartManager*/
-        $cart_manager= $this->get('vespolina.cart_manager');
+        $cart_manager = $this->get('vespolina.cart_manager');
         $owner = $this->getUser();
         /** @var $cart \Vespolina\CartBundle\Document\Cart */
         $cart = $cart_manager->findOpenCartByOwner($owner);
@@ -56,11 +55,11 @@ class ShopController extends Controller
         if ($req->getMethod() == 'POST') {
 
 
-            if (!$cart){
+            if (!$cart) {
                 $cart = $cart_manager->createCart();
             }
             /** @var $cart_item \Vespolina\CartBundle\Document\CartItem */
-            $cart_item = $cart_manager->createItem();
+            $cart_item = $cart_manager->createItem($product->getCartableProduct());
             $cart_item->setName($product->getName());
             $cart_item->setDescription($product->getDescription());
             $cart_item->setPrice($product->getPrice());
@@ -72,13 +71,13 @@ class ShopController extends Controller
 
             if (!$req->isXmlHttpRequest()) {
                 return $this->redirect($this->generateUrl('shop_product', array(
-                    'category_slug'=>$product->getFirstCategory()->getSlug(),
-                    'product_slug'=>$product->getSlug()
+                    'category_slug' => $product->getFirstCategory()->getSlug(),
+                    'product_slug' => $product->getSlug()
                 )));
             }
 
             return array(
-                'product'=>$product
+                'product' => $product
             );
 
         }
@@ -104,15 +103,14 @@ class ShopController extends Controller
     {
         $cm = $this->get('jeka.category_manager');
         $category = $cm->findBySlug($slug);
-        if (!$category)
-        {
+        if (!$category) {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
         }
 
         //print $cm->findChildren($category);
         return array(
-            'category'=>$category,
-            'children'=>$cm->findChildren($category)
+            'category' => $category,
+            'children' => $cm->findChildren($category)
         );
 
     }
