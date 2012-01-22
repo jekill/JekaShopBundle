@@ -1,20 +1,33 @@
 {% extends "JekaShopBundle::layout.html.twig"%}
 
-
 {% block title %}
-    {{category.name}}
+{{category.name}}
 {% endblock%}
 
 {% block content %}
 <div class="jk-category">
-{% include 'JekaShopBundle:Shop:_category_breadcrumb.html.twig' with {'category':category}%}
-<h1>{{category.name}}</h1>
-{% if children|length>0%}
+    {% if children|length>0%}
     <ul>
-    {% for child in children%}
+        {% for child in children%}
         <li><a href="{{path('shop_category',{'slug':child.slug})}}">{{child.name}}</a></li>
-    {% endfor%}
+        {% endfor%}
     </ul>
-{% endif%}
+    {% endif%}
+
+    <h1>{{category.name}}</h1>
+
+    {#{% include 'JekaShopBundle:Shop:_category_breadcrumb.html.twig' with {'category': category}%}#}
+
+    <div class="products-list row">
+
+        {% for product in pager.getCurrentPageResults()%}
+
+        <div class="span3">
+            {% include 'JekaShopBundle:Shop:_thumb.html.twig' with {'product':product}%}
+        </div>
+        {% endfor%}
+
+    </div>
+
 </div>
 {% endblock%}

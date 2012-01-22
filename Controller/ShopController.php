@@ -96,24 +96,47 @@ class ShopController extends Controller
      */
     public function categoryAction($slug)
     {
-        $cm = $this->get('jeka.category_manager');
-        $category = $cm->findBySlug($slug);
+        $request = $this->getRequest();
+        /** @var $cat_manager \Jeka\CategoryBundle\Document\CategoryManager */
+        $cat_manager = $this->get('jeka.category_manager');
+        $category = $cat_manager->findBySlug($slug);
         if (!$category) {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
         }
 
-        /** @var $re \Symfony\Component\HttpFoundation\Request */
-        $re = $this->getRequest();
-
         $this->getRequest()->attributes->set('current_category', $category);
-        $this->getRequest()->attributes->set('eee',$this->getRequest()->attributes->get('eee').'1');
+
+        /** @var $prod_manager \Jeka\ShopBundle\Document\ProductManager */
+        $prod_manager = $this->get('vespolina.product_manager');
+
+        $desc = $cat_manager->findDescendants($category);
+        //print_r(count($desc));exit;
+        $categories = array($category);
+        if ($desc && count($desc)>0)
+        {
+            $categories = array_merge($categories, $desc->toArray());
+        }
+        $products_query = $prod_manager->createQueryFindProductsByCategories($categories);
+
+
+        $pager = $this->createPager($products_query);
+        $pager->setMaxPerPage(20);
+        $pager->setCurrentPage($request->get('page',1));
 
         //print $cm->findChildren($category);
         return array(
             'category' => $category,
-            'children' => $cm->findChildren($category)
+            'children' => $cat_manager->findChildren($category),
+            'pager' => $pager
         );
 
+    }
+
+    public function createPager($query)
+    {
+        $adapter = new \Pagerfanta\Adapter\DoctrineODMMongoDBAdapter($query);
+        $pager = new \Pagerfanta\Pagerfanta($adapter);
+        return $pager;
     }
 
 
@@ -127,25 +150,57 @@ class ShopController extends Controller
         );
     }
 
+
     /**
      * @Template
      */
     public function categoriesNavAction()
     {
-        /** @var $request \Symfony\Component\HttpFoundation\Request */
-        $request = $this->getRequest();
-
         /** @var $cat_manager \Jeka\CategoryBundle\Document\CategoryManager */
         $cat_manager = $this->get('jeka.category_manager');
         $root = $cat_manager->getRoot();
 
         $first_level = $cat_manager->findChildren($root);
 
-        $this->getRequest()->attributes->set('eee',$this->getRequest()->attributes->get('eee').'2');
+        $current_category = $this->initCurrentCategory();
+
         return array(
             'first_level' => $first_level,
-            'current_category' => $this->getRequest()->attributes->get('current_category'),
+            'current_category' => $current_category,
         );
+    }
+
+    private function initCurrentCategory()
+    {
+        /** @var $request \Symfony\Component\HttpFoundation\Request */
+        $request = $this->getRequest();
+        /** @var $router \Symfony\Bundle\FrameworkBundle\Routing\Router */
+        $router = $this->get('router');
+
+        $current_category = $request->attributes->get('current_category');
+
+        if (!$current_category) {
+            $url = str_replace($request->getBaseUrl(), '', $request->getRequestUri());
+            $cur_routes = ($router->match($url));
+            if ($cur_routes !== false) {
+                $slug = '';
+                switch ($cur_routes['_route'])
+                {
+                    case 'shop_category':
+                        $slug = $cur_routes['slug'];
+                        break;
+                    case 'shop_product':
+                        $slug = $cur_routes['category_slug'];
+                        break;
+                }
+                if ($slug) {
+                    $cat_manager = $this->get('jeka.category_manager');
+                    $current_category = $cat_manager->findBySlug($slug);
+                    $request->attributes->set('current_category', $current_category);
+                }
+            }
+        }
+        return $current_category;
     }
 
     public function getCart()

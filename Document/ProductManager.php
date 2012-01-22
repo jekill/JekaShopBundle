@@ -15,4 +15,17 @@ class ProductManager extends BaseManager
     {
             return $this->productRepo->createQueryBuilder();
     }
+
+    public function createQueryFindProductsByCategories($categories=array())
+    {
+        $ids = array();
+        foreach($categories as $c){
+            //print get_class($c)."<br/>";
+            $ids[]=$this->dm->createDBRef($c);
+        }
+
+        return $this->productRepo->createQueryBuilder()
+            ->field('categories')->in($ids);
+    }
+
 }
