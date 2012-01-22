@@ -1,0 +1,23 @@
+{% extends "JekaShopBundle::layout.html.twig"%}
+
+{% block title%}{{jeka_shop_name}} &mdash; Фотоаольбомы и фототовары. Подарки любимым и близким.{% endblock%}
+
+{% block content %}
+
+<div class="row">
+    <div class="span12 offset1">
+        <h4>{{'Products'|trans}}</h4>
+        <div class="row">
+        {% for product in products %}
+            <div class="span4">
+                {% include 'JekaShopBundle:Shop:_thumb.html.twig' with {'product':product}%}
+            </div>
+        {% else %}
+            No products loaded.
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock content%}

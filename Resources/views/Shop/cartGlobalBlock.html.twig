@@ -1,0 +1,14 @@
+<div class="cart">
+    <div>
+    <div class="h">{{'cart.cart_title'|trans}}</div>
+    <div class="quantity">
+        {{'cart.quantity'|trans}}: <span class="cart_quantity">{{cart.items|length}}</span>
+    </div>
+    <div class="amount">
+        {{'cart.amount'|trans}}: <span class="cart_amount">{{cart.total}}</span> руб.
+    </div>
+    <div class="order">
+        <a href="{{path('shop_cart')}}">{{'cart.checkout'|trans}}</a>
+    </div>
+    </div>
+</div>

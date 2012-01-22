@@ -48,18 +48,13 @@ class ShopController extends Controller
 
         /** @var $cart_manager  \Vespolina\CartBundle\Document\CartManager*/
         $cart_manager = $this->get('vespolina.cart_manager');
-        $owner = $this->getUser();
-        /** @var $cart \Vespolina\CartBundle\Document\Cart */
-        $cart = $cart_manager->findOpenCartByOwner($owner);
 
         if ($req->getMethod() == 'POST') {
 
+            $cart = $this->getCart();
 
-            if (!$cart) {
-                $cart = $cart_manager->createCart();
-            }
             /** @var $cart_item \Vespolina\CartBundle\Document\CartItem */
-            $cart_item = $cart_manager->createItem($product->getCartableProduct());
+            $cart_item = $cart_manager->createItem($product);
             $cart_item->setName($product->getName());
             $cart_item->setDescription($product->getDescription());
             $cart_item->setPrice($product->getPrice());
@@ -107,6 +102,12 @@ class ShopController extends Controller
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
         }
 
+        /** @var $re \Symfony\Component\HttpFoundation\Request */
+        $re = $this->getRequest();
+
+        $this->getRequest()->attributes->set('current_category', $category);
+        $this->getRequest()->attributes->set('eee',$this->getRequest()->attributes->get('eee').'1');
+
         //print $cm->findChildren($category);
         return array(
             'category' => $category,
@@ -114,5 +115,57 @@ class ShopController extends Controller
         );
 
     }
+
+
+    /**
+     * @Template
+     */
+    public function cartGlobalBlockAction()
+    {
+        return array(
+            'cart' => $this->getCart()
+        );
+    }
+
+    /**
+     * @Template
+     */
+    public function categoriesNavAction()
+    {
+        /** @var $request \Symfony\Component\HttpFoundation\Request */
+        $request = $this->getRequest();
+
+        /** @var $cat_manager \Jeka\CategoryBundle\Document\CategoryManager */
+        $cat_manager = $this->get('jeka.category_manager');
+        $root = $cat_manager->getRoot();
+
+        $first_level = $cat_manager->findChildren($root);
+
+        $this->getRequest()->attributes->set('eee',$this->getRequest()->attributes->get('eee').'2');
+        return array(
+            'first_level' => $first_level,
+            'current_category' => $this->getRequest()->attributes->get('current_category'),
+        );
+    }
+
+    public function getCart()
+    {
+        /** @var $cart_manager  \Vespolina\CartBundle\Document\CartManager*/
+        $cart_manager = $this->get('vespolina.cart_manager');
+        $owner = $this->getUser();
+        /** @var $session \Symfony\Component\HttpFoundation\Session */
+        $session = $this->getRequest()->getSession();
+        $session_id = $session->getId();
+        /** @var $cart \Vespolina\CartBundle\Document\Cart */
+        $cart = $cart_manager->findOpenCartByOwner($owner);
+
+        if (!$cart) {
+            $cart = $cart_manager->createCart();
+            $cart->setOwner($owner);
+            return $cart;
+        }
+        return $cart;
+    }
+
 
 }

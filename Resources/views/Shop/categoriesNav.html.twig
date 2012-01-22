@@ -1,0 +1,10 @@
+
+<div class="categories_nav">
+<ul class="first_level menu">
+    {% for c in first_level%}
+    <li><a href="{{path('shop_category',{'slug':c.slug})}}"
+            class="{{(current_category and c.id==current_category.id?'current':'')}}"
+            >{{c.name}}</a></li>
+    {% endfor%}
+</ul>
+</div>
