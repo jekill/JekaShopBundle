@@ -6,13 +6,6 @@
 
 {% block content %}
 <div class="jk-category">
-    {% if children|length>0%}
-    <ul>
-        {% for child in children%}
-        <li><a href="{{path('shop_category',{'slug':child.slug})}}">{{child.name}}</a></li>
-        {% endfor%}
-    </ul>
-    {% endif%}
 
     <h1>{{category.name}}</h1>
 

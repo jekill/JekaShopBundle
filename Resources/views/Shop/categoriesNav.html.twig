@@ -1,10 +1,30 @@
-
 <div class="categories_nav">
-<ul class="first_level menu">
-    {% for c in first_level%}
-    <li><a href="{{path('shop_category',{'slug':c.slug})}}"
-            class="{{(current_category and c.id==current_category.id?'current':'')}}"
-            >{{c.name}}</a></li>
+    <ul class="first_level menu">
+        {% for c in first_level%}
+            {{_self.li(c,current_category)}}
+        {% endfor%}
+    </ul>
+
+    {% if tree_layers|length>0%}
+    {% for layer in tree_layers%}
+    <ul class="layer layer_{{loop.index}} menu">
+        {% for c in layer%}
+        {{_self.li(c,current_category)}}
+        {% endfor%}
+    </ul>
     {% endfor%}
-</ul>
+    {%endif%}
+
+
 </div>
+
+{% macro li(c,current_category)%}
+<li>
+    <a href="{{path('shop_category',{'slug':c.slug})}}"
+       class="{{(current_category and c.id==current_category.id?'current active':
+        (current_category.isDescentOf(c)?'current':''))
+        }}">
+        {{c.name}}
+    </a>
+</li>
+{% endmacro%}

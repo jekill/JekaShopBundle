@@ -112,16 +112,14 @@ class ShopController extends Controller
         $desc = $cat_manager->findDescendants($category);
         //print_r(count($desc));exit;
         $categories = array($category);
-        if ($desc && count($desc)>0)
-        {
+        if ($desc && count($desc) > 0) {
             $categories = array_merge($categories, $desc->toArray());
         }
         $products_query = $prod_manager->createQueryFindProductsByCategories($categories);
 
-
         $pager = $this->createPager($products_query);
         $pager->setMaxPerPage(20);
-        $pager->setCurrentPage($request->get('page',1));
+        $pager->setCurrentPage($request->get('page', 1));
 
         //print $cm->findChildren($category);
         return array(
@@ -163,13 +161,34 @@ class ShopController extends Controller
         $first_level = $cat_manager->findChildren($root);
 
         $current_category = $this->initCurrentCategory();
+        $tree_layers = array();
+
+        if ($current_category !== null && $current_category->getAncestors()->count() > 1) {
+            foreach ($current_category->getAncestors() as $i => $category)
+            {
+                if ($i < 1) continue;
+                $tree_layers[] = $cat_manager->findChildren($category);
+            }
+        }
+
+        if ($current_category!==null){
+            $children = $cat_manager->findChildren($current_category);
+            if (count($children)>0)
+            {
+                $tree_layers[]=$children;
+            }
+        }
 
         return array(
             'first_level' => $first_level,
             'current_category' => $current_category,
+            'tree_layers' => $tree_layers
         );
     }
 
+    /**
+     * @return \Jeka\CategoryBundle\Document\Category|null
+     */
     private function initCurrentCategory()
     {
         /** @var $request \Symfony\Component\HttpFoundation\Request */
