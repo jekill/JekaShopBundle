@@ -5,8 +5,10 @@
 
     <div id="header">
         <div id="logo">
-            <h1>Альбомчик.Ру</h1>
+            <h1><a href="{{path("homepage")}}">{{settings.siteName}}</a></h1>
+            <p>{{settings.siteLogoDescription}}</p>
         </div>
+        <div class="phones"><span>тел.:</span> {{settings.contacts['phones']}}</div>
         <ul class="menu" id="top_menu">
             <li>
                 <a href="{{path('homepage')}}">Главная</a>
@@ -33,12 +35,18 @@
     </div>
 
 
-
+    <footer>
     <!-- Footer -->
     <div id="footer" class="box">
-        <p class="f-left">Developed by <a href="http://github.com/vespolina/vespolina-sandbox">vespolina team</a></p>
-        <p class="f-right">&copy; 2012 <a href="#">Vespolina</a>, All Rights Reserved &reg;</p>
+        <p class="copy">&copy; 2012 Albomchick.Ru</p>
+        <div class="info">
+            <a class="developed" href="http://github.com/vespolina/vespolina-sandbox">Создание и поддердка сайта &mdash; HotSupport.Ru</a>
+            <div class="jeka-shop">
+                Сайт основан на OpenSource проекте <a href="http://github.com/vespolina/jekashop-sandbox">JekaShop</a>
+            </div>
+        </div>
     </div> <!-- /footer -->
+    </footer>
 </div>
 {% endblock %}
 

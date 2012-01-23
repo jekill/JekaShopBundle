@@ -21,8 +21,9 @@
 {% macro li(c,current_category)%}
 <li>
     <a href="{{path('shop_category',{'slug':c.slug})}}"
-       class="{{(current_category and c.id==current_category.id?'current active':
-        (current_category.isDescentOf(c)?'current':''))
+       class="{{
+       (current_category and c.id==current_category.id)?'current active':
+            ((current_category and current_category.isDescentOf(c))?'current':'')
         }}">
         {{c.name}}
     </a>
