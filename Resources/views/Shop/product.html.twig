@@ -13,7 +13,7 @@
 
 
     <div class="row">
-        <div class="images span7">
+        <div class="images span5">
             {% if product.previewImage%}
             <div class="preview">
                     <a href="{{product.previewImage.width>600?product.previewImage.src|apply_filter('prod_preview_big'):product.previewImage.src}}" rel="{{product.images|length>1?"":'prettyPhoto'}}"
@@ -24,7 +24,7 @@
             {% endif%}
             {% if product.images|length > 1 %}
             <ul class="list-images">
-                {% for image in product.images%}
+                {% for image in product.imagesOrderedArray%}
                 <li>
                     <a href="{{image.width>600?image.src|apply_filter('prod_preview_big'):image.src}}" rel="prettyPhoto[prod_{{product.id}}]"><img src="{{image.src|apply_filter('prod_preview_small')}}"/></a>
                 </li>
@@ -36,46 +36,51 @@
                 <li></li>
             </ul>
         </div>
-        <div class="description span9">
+        <div class="description span7">
             <h1>{{product.name}}</h1>
+            <div>s3: {{product.s3Id}}</div>
             {{product.description}}
             
-            <p>Российская биатлонистка Ольга Зайцева в пятницу, 6 января, завоевала бронзу в спринтерской гонке на четвертом этапе розыгрыша Кубка мира по биатлону, который проходит в немецком Оберхофе. Об этом сообщает ИТАР-ТАСС.</p>
-
-            <p>Зайцева прошла дистанцию 7,5 километра за 23 минуты 11 секунд, не заработав ни одного штрафного круга. Таким образом, спортсменка получила пятую подряд награду в личных состязаниях за этот сезон.</p>
-
-            <p>Золото завоевала немка Магдалена Нойнер. Она прошла дистанцию за 22 минуты 27,6 секунды, также не промахнувшись ни на одном огневом рубеже.</p>
-            <p>Несмотря на один штрафной круг, второй к финишу пришла Дарья Домрачева из Белоруссии. Ее результат - 23 минуты 4,9 секунды.</p>
-
-            <table class="features">
+            {% if product.features|length>0%}
+            <h3>Параметры товара:</h3>
+            <table class="features table table-condensed" >
+                <tbody>
+                {% for f in product.features%}
                 <tr>
-                    <th>Листов</th>
-                    <td>240</td>
+                    <th>{{f.searchTerm}}</th>
+                    <td>{{f.name}}</td>
                 </tr>
-                <tr>
-                    <th>Фотографий</th>
-                    <td>480</td>
-                </tr>
+                {% endfor%}
+                </tbody>
+            </table>
+            {% endif%}
 
             </table>
 
             <div class="buy-product">
                 <h2>Купить: <span>{{product.name}}</span></h2>
+                {% if product.options|length>0%}
+                        {% include 'JekaShopBundle:Shop:_product_options.html.twig' %}
+                {% endif%}
+                <h3  class="price">Цена: <span class="value">{{product.price}}</span> <span class="curr">руб.</span></h3>
                 <form action="{{path('shop_to_cart')}}" class="jk-to-cart-form" method="post" id="to-cart-form_{{product.id}}">
                     <input type="hidden" name="product_id" value="{{product.id}}" >
                     <div class="quantity">
                         <span>Количество:</span>
-                        <a href="#" title="-1" class="minus">-</a>
-                        <input type="text" value="1" name="quantity" class="quantity" size="2" id="quantity">
-                        <a href="#" title="+1" class="plus">+</a>
+                        <a href="#" title="-1" class="minus quantity_change">-</a>
+                        {% set pq = cart.findProductQuantity(product)%}
+                        <input type="text" value="{{pq?pq:1}}" name="quantity" class="quantity" size="2" id="quantity">
+                        <a href="#" title="+1" class="plus quantity_change">+</a>
                     </div>
 
-                    <input type="submit" value="В корзину" class="to-cart btn success" >
+                    <button type="submit" class="to-cart btn btn-success"><i class="icon-shopping-cart icon-white"></i> В корзину</button>
+
                     <div class="action-info"></div>
                     <div class="action-info-js"></div>
                     <div class="cart-info">
-                        Сейчас в <a href="{{path('shop_cart')}}">вашей корзине</a>
-                        <span class="jk-cart-items">3</span> товара на сумму <span class="jk-cart-amount">3042</span> руб.
+                        {% if cart.totalQuantity>0%}
+                            {% include 'JekaShopBundle:Shop:_cart_info.html.twig' with {'cart':cart}%}
+                        {% endif%}
                     </div>
                 </form>
             </div>

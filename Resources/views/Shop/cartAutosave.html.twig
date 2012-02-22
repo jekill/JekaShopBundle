@@ -1,0 +1,5 @@
+{% include 'JekaShopBundle:Shop:_cart_table.html.twig' with {'cart':cart}%}
+
+<script type="text/javascript">
+    Jeka.Shop.updateCartInfo('{{cart.totalQuantity}}','{{cart.total}}');
+</script>

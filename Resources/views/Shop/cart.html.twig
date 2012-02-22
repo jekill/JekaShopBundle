@@ -1,0 +1,105 @@
+{% extends "JekaShopBundle::layout.html.twig"%}
+
+{% block categories%}{%endblock%}
+
+{% block title %}
+{{'cart.page.title'|trans}}
+{% endblock%}
+
+{% block content %}
+<div class="cart-page">
+    <h1>{{'cart.page.title'|trans}}</h1>
+
+    {% include 'JekaShopBundle::_flash.html.twig'%}
+
+
+    <form action="{{path('shop_cart')}}" method="post">
+        <div id="cart-table">
+            {% include 'JekaShopBundle:Shop:_cart_table.html.twig' with {'cart':cart}%}
+        </div>
+
+        <div class="buttons">
+            <a href="#" class="clear_cart">Очистить корзину</a>
+            {#<a href="#" class="btn">Пересчетать</a>#}
+        </div>
+
+        <hr/>
+        <div class="delivery_choise">
+            <h2>Тип доставки</h2>
+            <ul>
+                <li>
+                    <input id="delivery_moscow_courier" type="radio" name="delivery" value="moscow_courier" checked="checked"/>
+                    <label for="delivery_moscow_courier">Доставка курьером по Москве ({{moscow_courier.price}} руб.)</label>
+                </li>
+                <li>
+                    <input id="delivery_moscow_self" type="radio" name="delivery" value="moscow_self"/>
+                    <label for="delivery_moscow_self">Самовывоз (Бесплатно <a
+                            href="#delivery_self">информация</a>)</label>
+                </li>
+                <li>
+                    <input id="delivery_russian_post" type="radio" name="delivery" value="russian_post"/>
+                    <label for="delivery_russian_post">Почтой России (Стоимость рассчитывается индивидуально)</label>
+                </li>
+            </ul>
+        </div>
+
+
+        <hr/>
+        <h2>Информация о покупателе</h2>
+        <br/>
+
+        <div class="row">
+            <div class="users-order-data span6 offset3">
+                {{form_rest(form)}}
+            </div>
+        </div>
+        <div class="form-actions checkout-action">
+            <button type="submit" class="btn btn-success"><i class="icon-ok icon-white"></i> Заказать</button>
+        </div>
+    </form>
+</div>
+
+<div id="auto-save-info" class="modal fade" style="display: none;">
+    <div class="modal-body">
+        <div class="jk-process">Перерасчет суммы заказа</div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var autoSaveInterval = null;
+        Jeka.Shop.bindPlusMinusButtons(true);
+        //$("#auto-save-info").modal("show");
+        $('input.quantity').live('change', function () {
+            var autoSaveUrl = "{{path("shop_cart_autosave")}}";
+            if (autoSaveInterval) window.clearTimeout(autoSaveInterval);
+            $form = $(this).parents('form');
+            autoSaveInterval = window.setTimeout(function () {
+                var data = {};
+                $form.find("input.quantity").each(function (i, e) {
+                    var $e = $(e);
+                    data[$e.attr('name')] = $e.val();
+
+                });
+                $("#auto-save-info").modal({
+                    backdrop:false
+                });
+                $.post(autoSaveUrl, data, function (data, success) {
+                    if (success == 'success') {
+                        $("#cart-table").html(data);
+                        $("#auto-save-info").modal("hide");
+                    }
+                })
+            }, 1000);
+        });
+
+
+        $('a.clear_cart').click(function () {
+            if (confirm("{{'To clear your shopping cart?'|trans}}")) {
+                window.location.href = "{{path('shop_cart_clean')}}";
+            }
+            return true;
+        });
+    });
+</script>
+        {% endblock content%}

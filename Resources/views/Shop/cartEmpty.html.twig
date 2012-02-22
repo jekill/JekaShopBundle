@@ -1,0 +1,19 @@
+{% extends "JekaShopBundle::layout.html.twig"%}
+
+
+{% block title %}
+{{'cart.page.title'|trans}}
+{% endblock%}
+
+{% block content %}
+<div class="cart-page">
+    <h1>{{'cart.page.title'|trans}}</h1>
+
+    {% include 'JekaShopBundle::_flash.html.twig'%}
+
+    <h2 class="warning">Корзина пуста.</h2>
+    <a href="{{path('shop_category',{'slug':'root'})}}" class="btn" style="text-align: center; display: block;">
+        &larr; Вернуться в магазин
+    </a>
+</div>
+{% endblock%}

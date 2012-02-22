@@ -1,0 +1,4 @@
+Сейчас в <a href="{{path('shop_cart')}}">вашей корзине</a>
+<span class="cart_quantity">{{cart.totalQuantity}}</span>
+{{'products.pluralized'|transchoice(cart.totalQuantity)}},
+на сумму <span class="cart_amount">{{cart.total}}</span> руб.

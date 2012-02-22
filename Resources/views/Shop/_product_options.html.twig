@@ -1,0 +1,14 @@
+{% for group in product.options %}
+<div class="clearfix">
+    <label>{{group.name}}</label>
+
+    <div class="input">
+        <select name="option[{{group.name}}]">
+            {% for option in group.options%}
+            <option>{{option.value}}</option>
+            {% endfor%}
+        </select>
+    </div>
+</div>
+
+{% endfor%}

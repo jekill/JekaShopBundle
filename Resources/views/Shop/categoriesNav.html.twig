@@ -1,7 +1,9 @@
 <div class="categories_nav">
     <ul class="first_level menu">
         {% for c in first_level%}
-            {{_self.li(c,current_category)}}
+            {% if not c.isHidden%}
+                {{_self.li(c,current_category)}}
+            {% endif%}
         {% endfor%}
     </ul>
 

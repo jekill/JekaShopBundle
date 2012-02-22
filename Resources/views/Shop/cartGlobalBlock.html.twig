@@ -2,13 +2,13 @@
     <div>
     <div class="h">{{'cart.cart_title'|trans}}</div>
     <div class="quantity">
-        {{'cart.quantity'|trans}}: <span class="cart_quantity">{{cart.items|length}}</span>
+        {{'cart.quantity'|trans}}: <span class="cart_quantity">{{cart.totalQuantity}}</span>
     </div>
     <div class="amount">
-        {{'cart.amount'|trans}}: <span class="cart_amount">{{cart.total}}</span> руб.
+        {{'cart.amount'|trans}}: <span class="cart_amount">{{cart.total}}</span> <span class="curr">руб.</span>
     </div>
-    <div class="order">
-        <a href="{{path('shop_cart')}}">{{'cart.checkout'|trans}}</a>
+    <div class="checkout">
+        <a onclick="return !$(this).hasClass('disabled');" class="{{cart.items|length==0?'disabled':''}}" href="{{path('shop_cart')}}">{{'cart.checkout'|trans}}</a>
     </div>
     </div>
 </div>

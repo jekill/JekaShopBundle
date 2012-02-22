@@ -22,8 +22,8 @@ class FirstpageController extends Controller
             array(
                 'type'=> Product::PHYSICAL
             ),
-            array('created_at'=>'desc'),
-            10
+            array('random'=>1),
+            8
         );
         return array(
             'products'=>$products

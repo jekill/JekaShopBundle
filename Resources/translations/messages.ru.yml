@@ -1,5 +1,23 @@
-Products: Товары
+Themes: Темы
+Random: Случайно
 cart.cart_title: Корзина
-cart.quantity: Товаров в корзине
-cart.amount: На сумму
+cart.quantity: 'Товаров в корзине'
+cart.amount: 'На сумму'
 cart.checkout: Оформить
+cart.page.title: 'Оформление и управление корзиной'
+'Product name': 'Название продукта'
+Quantity: Количество
+remove: удалить
+Products: Товары
+Product: Товар
+products.pluralized: товар|товара|товаров
+Item price: Цена (ед.)
+Tot. price: Цена (итог)
+customer.name: Ваше имя
+customer.email: Ваш E-mail
+customer.phone: Ваш телефон
+customer.address: Адрес доставки
+customer.comments: Комментарии к заказу
+your.order.sended: Заказ отправлен на обработку. Для уточнения деталей заказа, в ближайшее время с вами свяжется наш менеджер. Спасибо за интерес к нашему магазину.
+
+

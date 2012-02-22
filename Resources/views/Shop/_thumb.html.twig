@@ -1,10 +1,15 @@
 {% set product_path = path('shop_product',{'category_slug':product.categorySlug,'product_slug':product.slug})%}
-<div><a href="{{product_path}}">{{ product.name }}</a></div>
-<div class="image">
-    {% if  product.getPreviewImage()%}
-        <a href="{{product_path}}"><img src="{{ product.getPreviewImage().getSrc()| apply_filter('prod_thumb')  }}"/></a>
+
+<div class="product-thumb">
+    <div class="image">
+        {% if  product.getPreviewImage()%}
+        <a href="{{product_path}}"><img
+                src="{{ product.getPreviewImage().getSrc()| apply_filter('prod_thumb')  }}"/></a>
+        {% endif%}
+    </div>
+    {% if product.price>0 %}
+    <div class="price"><a href="{{product_path}}">Цена: <span class="value">{{product.price}}</span> <span class="curr">руб.</span></a></div>
     {% endif%}
+    <div class="title"><a href="{{product_path}}">{{ product.name }}</a></div>
+
 </div>
-{% if product.price>0 %}
-    <div class="price">{{product.price}} <span class="curr">руб.</span></div>
-{% endif%}

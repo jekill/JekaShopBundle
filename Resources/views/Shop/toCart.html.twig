@@ -1,6 +1,11 @@
 <script type="text/javascript">
     $(function () {
         var formId = 'to-cart-form_{{product.id}}';
-        $('#'+formId+' .action-info').html('<div class="success">Товар успешно добавлен в корзину.</div>');
+        $('#' + formId + ' .action-info').html('<div class="success">Товар успешно добавлен в корзину.</div>');
+        Jeka.Shop.updateCartInfo("{{cart.totalQuantity}}","{{cart.total}}");
+
+        {% if cart.totalQuantity>0%}
+            $('.buy-product .cart-info').html(("{%filter escape('js')%}{% include 'JekaShopBundle:Shop:_cart_info.html.twig' with {'cart':cart}%}{%endfilter%}"));
+        {% endif%}
     });
 </script>

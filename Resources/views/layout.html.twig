@@ -6,6 +6,7 @@
     <div id="header">
         <div id="logo">
             <h1><a href="{{path("homepage")}}">{{settings.siteName}}</a></h1>
+
             <p>{{settings.siteLogoDescription}}</p>
         </div>
         <div class="phones"><span>тел.:</span> {{settings.contacts['phones']}}</div>
@@ -14,38 +15,50 @@
                 <a href="{{path('homepage')}}">Главная</a>
             </li>
             <li>
-                <a href="{{path('homepage')}}">Контакты</a>
+                <a href="{{path('shop_category',{'slug':'root'})}}">Товары</a>
             </li>
             <li>
-                <a href="{{path('homepage')}}">Доставка</a>
+                <a href="{{path('pages_contacts')}}">Контакты</a>
+            </li>
+            <li>
+                <a href="{{path('pages_delivery')}}">Доставка</a>
             </li>
         </ul>
         {% render 'JekaShopBundle:Shop:cartGlobalBlock'%}
     </div>
-    <div id="content" >
+    <div id="content">
 
-    <div id="categories">
-        {% render 'JekaShopBundle:Shop:categoriesNav'%}
-    </div>
+        {% block categories%}
+        <div id="categories">
+            <span class="h">Каталог товаров:</span>
 
-    {% block content %}
+            {% render 'JekaShopBundle:Shop:categoriesNav' %}
+        </div>
+        {% endblock%}
+
+        {% block content %}
         No content.
-    {% endblock %}
+        {% endblock %}
 
     </div>
 
 
     <footer>
-    <!-- Footer -->
-    <div id="footer" class="box">
-        <p class="copy">&copy; 2012 Albomchick.Ru</p>
-        <div class="info">
-            <a class="developed" href="http://github.com/vespolina/vespolina-sandbox">Создание и поддердка сайта &mdash; HotSupport.Ru</a>
-            <div class="jeka-shop">
-                Сайт основан на OpenSource проекте <a href="http://github.com/vespolina/jekashop-sandbox">JekaShop</a>
+        <!-- Footer -->
+        <div id="footer" class="box">
+            <p class="copy">&copy; 2012 Albomchick.Ru</p>
+
+            <div class="info">
+                <a class="developed" href="http://github.com/vespolina/vespolina-sandbox">Создание и поддердка
+                    сайта &mdash; HotSupport.Ru</a>
+
+                <div class="jeka-shop">
+                    Сайт основан на OpenSource проекте <a href="http://github.com/jekill/jekashop-sandbox">"Интернет-магазин
+                    JekaShop"</a>
+                </div>
             </div>
         </div>
-    </div> <!-- /footer -->
+        <!-- /footer -->
     </footer>
 </div>
 {% endblock %}
