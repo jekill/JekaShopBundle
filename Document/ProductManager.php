@@ -19,6 +19,10 @@ class ProductManager extends BaseManager
         return $this->productRepo->createQueryBuilder();
     }
 
+    /**
+     * @param array $categories
+     * @return \Doctrine\ODM\MongoDB\Query\Builder
+     */
     public function createQueryFindProductsByCategories($categories = array())
     {
         $ids = array();

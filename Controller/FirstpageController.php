@@ -20,7 +20,8 @@ class FirstpageController extends Controller
 
         $products = $pm->findBy(
             array(
-                'type'=> Product::PHYSICAL
+                'type'=> Product::PHYSICAL,
+                'disabled'=>false
             ),
             array('random'=>1),
             8

@@ -245,6 +245,8 @@ class ShopController extends Controller
             $categories = array_merge($categories, $desc->toArray());
         }
         $products_query = $prod_manager->createQueryFindProductsByCategories($categories);
+        $products_query->field('disabled')->equals(false);
+
 
         $pager = $this->createPager($products_query);
         $pager->setMaxPerPage(120);
