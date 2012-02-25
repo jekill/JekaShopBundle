@@ -6,12 +6,19 @@
 
     <parameters>
         <parameter key="jeka_shop.shop_settings_extension.class">Jeka\ShopBundle\Twig\ShopSettingsExtension</parameter>
+        <parameter key="jeka_shop.shop_settings.class">Jeka\ShopBundle\Model\ShopSettings</parameter>
         <parameter key="jeka_shop.mail_former.class">Jeka\ShopBundle\Mail\MailFormer</parameter>
+
     </parameters>
 
 
     <services>
+        <service id="jeka.shop_settings" class="%jeka_shop.shop_settings.class%">
+            <argument type="service" id="service_container"/>
+        </service>
+
         <service id="twig.extension.shop_settings" class="%jeka_shop.shop_settings_extension.class%">
+            <argument type="service" id="jeka.shop_settings"/>
             <tag name="twig.extension" />
         </service>
 
