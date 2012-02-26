@@ -1,6 +1,7 @@
 <?php
 namespace Jeka\ShopBundle\Document;
 
+use \Jeka\CategoryBundle\Document\Category;
 use Vespolina\ProductBundle\Document\ProductManager as BaseManager;
 
 class ProductManager extends BaseManager
@@ -28,11 +29,17 @@ class ProductManager extends BaseManager
         $ids = array();
         foreach ($categories as $c) {
             //print get_class($c)."<br/>";
-            $ids[] = $this->dm->createDBRef($c);
+            //$ids[] = $this->dm->createDBRef($c);
+            $ids[]=new \MongoId( $c->getId());
         }
 
         return $this->productRepo->createQueryBuilder()
-            ->field('categories')->in($ids);
+            ->field('categories.$id')->in($ids);
+    }
+    public function createQueryFindProductsByCategory(Category $category)
+    {
+        return $this->productRepo->createQueryBuilder()
+            ->field('categories.id')->equals($category->getId());
     }
 
     /**
