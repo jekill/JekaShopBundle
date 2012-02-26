@@ -36,4 +36,19 @@ class MailFormer
         $this->mailer->send($message);
     }
 
+    function sendFeedbackMail($data){
+        $body = $this->templating->render('JekaPagesBundle:Pages:_feedback_mail.html.twig',array(
+            'name'=>$data['name'],
+            'email'=>$data['email'],
+            'message'=>$data['message']
+        ));
+
+        $message = \Swift_Message::newInstance()
+            ->setTo('albomchik.ru@jeka.ru')
+            ->setFrom('zakaz@albomchik.ru')
+            ->setSubject('[Albomchik.Ru] Feedback form')
+            ->setBody($body,'text/html');
+        $this->mailer->send($message);
+    }
+
 }
