@@ -25,20 +25,28 @@
 
         <hr/>
         <div class="delivery_choise">
-            <h2>Тип доставки</h2>
+            <h2>Вариант доставки</h2>
             <ul>
                 <li>
-                    <input id="delivery_moscow_courier" type="radio" name="delivery" value="moscow_courier" checked="checked"/>
-                    <label for="delivery_moscow_courier">Доставка курьером по Москве ({{moscow_courier.price}} руб.)</label>
+                    <input id="delivery_moscow_courier" type="radio" name="delivery" value="moscow_courier" />
+                    <label for="delivery_moscow_courier"><span>Доставка курьером по Москве</span> ({{moscow_courier.price}} руб.)</label>
+                </li>
+                <li>
+                    <input id="delivery_moscow_courier_holiday" type="radio" name="delivery" value="moscow_courier_holiday" checked="checked"/>
+                    <label for="delivery_moscow_courier_holiday"><span>Доставка курьером по Москве в выходные</span> (бесплатно)</label>
                 </li>
                 <li>
                     <input id="delivery_moscow_self" type="radio" name="delivery" value="moscow_self"/>
-                    <label for="delivery_moscow_self">Самовывоз (Бесплатно <a
-                            href="#delivery_self">информация</a>)</label>
+                    <label for="delivery_moscow_self"><span>Самовывоз</span> (Бесплатно <a
+                            href="{{path('pages_delivery')}}#self" target="_blank">информация</a>)</label>
                 </li>
                 <li>
                     <input id="delivery_russian_post" type="radio" name="delivery" value="russian_post"/>
-                    <label for="delivery_russian_post">Почтой России (Стоимость рассчитывается индивидуально)</label>
+                    <label for="delivery_russian_post"><span>Почтой России</span> (Стоимость рассчитывается индивидуально)</label>
+                </li>
+                <li>
+                    <input id="delivery_other" type="radio" name="delivery" value="other"/>
+                    <label for="delivery_other"><span>Предложите другой способ доставки</span> (Стоимость рассчитывается индивидуально)</label>
                 </li>
             </ul>
         </div>
