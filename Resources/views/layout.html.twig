@@ -9,7 +9,11 @@
 
             <p>{{settings.siteLogoDescription}}</p>
         </div>
-        <div class="phones"><span>тел.:</span> {{settings.contacts['phones']}}</div>
+        {#<div class="phones"><span>тел.:</span> {{settings.contacts['phones']}}</div>#}
+        <div class="offer">
+            <span>Спецпредложение:</span><br/>
+            <a href="{{path('pages_delivery')}}#delivery_holiday">Бесплатная доставака в выходной день</a>
+        </div>
         <ul class="menu" id="top_menu">
             <li>
                 <a href="{{path('homepage')}}">Главная</a>
