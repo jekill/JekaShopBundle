@@ -41,28 +41,13 @@
         <div class="description span7">
             <h1>{{product.name}}</h1>
             {#<div>s3: {{product.s3Id}}</div>#}
-            {{product.description|raw|markdown}}
-            
-            {% if product.features|length>0%}
-            <h3>Параметры товара:</h3>
-            <table class="features table table-condensed" >
-                <tbody>
-                {% for f in product.features%}
-                <tr>
-                    <th>{{f.searchTerm}}</th>
-                    <td>{{f.name}}</td>
-                </tr>
-                {% endfor%}
-                </tbody>
-            </table>
-            {% endif%}
 
-            </table>
+            {{product.description|raw|markdown}}
 
             <div class="buy-product">
                 <h2>Купить: <span>{{product.name}}</span></h2>
                 {% if product.options|length>0%}
-                        {% include 'JekaShopBundle:Shop:_product_options.html.twig' %}
+                {% include 'JekaShopBundle:Shop:_product_options.html.twig' %}
                 {% endif%}
                 <h3  class="price">Цена: <span class="value">{{product.price}}</span> <span class="curr">руб.</span></h3>
                 <form action="{{path('shop_to_cart')}}" class="jk-to-cart-form" method="post" id="to-cart-form_{{product.id}}">
@@ -81,11 +66,30 @@
                     <div class="action-info-js"></div>
                     <div class="cart-info">
                         {% if cart.totalQuantity>0%}
-                            {% include 'JekaShopBundle:Shop:_cart_info.html.twig' with {'cart':cart}%}
+                        {% include 'JekaShopBundle:Shop:_cart_info.html.twig' with {'cart':cart}%}
                         {% endif%}
                     </div>
                 </form>
             </div>
+
+
+
+            {% if product.features|length>0%}
+            <h3>Параметры товара:</h3>
+            <table class="features table table-condensed" >
+                <tbody>
+                {% for f in product.features%}
+                <tr>
+                    <th>{{f.searchTerm}}</th>
+                    <td>{{f.name}}</td>
+                </tr>
+                {% endfor%}
+                </tbody>
+            </table>
+            {% endif%}
+
+            </table>
+
 
         </div>
 
