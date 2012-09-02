@@ -345,7 +345,8 @@ class ShopController extends Controller
         $current_category = $request->attributes->get('current_category');
 
         if (!$current_category) {
-            $url = str_replace($request->getBaseUrl(), '', $request->getRequestUri());
+            list($url) = explode('?',$request->getRequestUri());
+            $url = str_replace($request->getBaseUrl(), '', $url);
             $cur_routes = ($router->match($url));
             if ($cur_routes !== false) {
                 $slug = '';

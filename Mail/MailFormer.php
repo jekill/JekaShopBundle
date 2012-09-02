@@ -25,10 +25,10 @@ class MailFormer
             'cart' => $order,
             'data' => $data
         ));
-        // fix hardcode
+        // todo: fix hardcode, email must be from configs
         $message = \Swift_Message::newInstance()
             //->setContentType()
-            ->setTo('albomchik.ru@jeka.ru')
+            ->setTo(array('albomchik.ru@jeka.ru'=>'Albomchik.Ru','zakaz@albomchik.ru'=>'Albomchik.Ru'))
             ->setFrom('zakaz@albomchik.ru')
             ->setSubject(sprintf($this->translator->trans('New order #%s'), $order->getNumber()))
             ->setBody($body,'text/html');
