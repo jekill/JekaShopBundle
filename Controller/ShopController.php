@@ -208,7 +208,6 @@ class ShopController extends Controller
     }
 
 
-
     /**
      * @Template
      */

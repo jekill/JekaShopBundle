@@ -19,6 +19,19 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('jeka_shop');
+        $rootNode
+            ->children()
+                ->arrayNode('feedback')
+                    ->children()
+                        ->arrayNode('order_notify_emails')
+                            ->useAttributeAsKey('email')
+                            ->prototype('scalar')->end()
+                        ->end()
+                        ->scalarNode('order_back_email')->cannotBeEmpty()->end()
+                    ->end()
+        ;
+
+
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

@@ -24,5 +24,10 @@ class JekaShopExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+//        var_dump($config['feedback']['order_notify_emails']);exit;
+        if (!empty($config['feedback'])){
+            $container->setParameter('jeka_shop.feedback',$config['feedback']);
+        }
     }
 }

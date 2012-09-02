@@ -26,6 +26,7 @@
             <argument type="service" id="mailer"/>
             <argument type="service" id="templating"/>
             <argument type="service" id="translator"/>
+            <argument>%jeka_shop.feedback%</argument>
         </service>
 
 

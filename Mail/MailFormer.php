@@ -10,17 +10,24 @@ class MailFormer
     private $mailer;
     private $templating;
     private $translator;
+    /** @var array */
+    private $feedback;
 
     function __construct(\Swift_Mailer $mailer, TwigEngine $templating,
-                         Translator $translator)
+                         Translator $translator,$feedback)
     {
         $this->mailer = $mailer;
         $this->templating = $templating;
         $this->translator = $translator;
+        $this->feedback = $feedback;
     }
 
     function sendOrderCreatedNotifcations(Cart $order, $data)
     {
+        if (empty($this->feedback['order_notify_emails'])){
+            return false;
+        }
+
         $body = $this->templating->render('JekaShopBundle:Shop:_new_order_email.html.twig', array(
             'cart' => $order,
             'data' => $data
@@ -28,8 +35,8 @@ class MailFormer
         // todo: fix hardcode, email must be from configs
         $message = \Swift_Message::newInstance()
             //->setContentType()
-            ->setTo(array('albomchik.ru@jeka.ru'=>'Albomchik.Ru','zakaz@albomchik.ru'=>'Albomchik.Ru'))
-            ->setFrom('zakaz@albomchik.ru')
+            ->setTo($this->feedback['order_notify_emails'])
+            ->setFrom($this->feedback['order_back_email'])
             ->setSubject(sprintf($this->translator->trans('New order #%s'), $order->getNumber()))
             ->setBody($body,'text/html');
 
