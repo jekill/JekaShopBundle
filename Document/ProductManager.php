@@ -30,12 +30,13 @@ class ProductManager extends BaseManager
         foreach ($categories as $c) {
             //print get_class($c)."<br/>";
             //$ids[] = $this->dm->createDBRef($c);
-            $ids[]=new \MongoId( $c->getId());
+            $ids[] = new \MongoId($c->getId());
         }
 
         return $this->productRepo->createQueryBuilder()
             ->field('categories.$id')->in($ids);
     }
+
     public function createQueryFindProductsByCategory(Category $category)
     {
         return $this->productRepo->createQueryBuilder()
@@ -45,9 +46,9 @@ class ProductManager extends BaseManager
     /**
      * @return \Application\Vespolina\ProductBundle\Document\Product
      */
-    public function createProduct()
+    public function createProduct($type = 'default')
     {
-        return parent::createProduct();
+        return parent::createProduct($type);
     }
 
     public function removeProduct($product)
@@ -62,6 +63,7 @@ class ProductManager extends BaseManager
         $qb = $this->productRepo->createQueryBuilder();
         //$qb->getQuery()
         $qb->field('features.id')->equals($feature_id);
+
         return $qb->getQuery()->getSingleResult();
     }
 

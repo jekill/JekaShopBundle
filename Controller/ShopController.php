@@ -17,7 +17,7 @@ class ShopController extends Controller
      */
     public function toCartAction()
     {
-        /** @var $req \Symfony\Component\HttpFoundation\Request */
+        /** @var $req Request */
         $req = $this->getRequest();
         /** @var $prod_man \Jeka\ShopBundle\Document\ProductManager */
         $prod_man = $this->get('vespolina.product_manager');
@@ -375,13 +375,13 @@ class ShopController extends Controller
 
         /** @var $session \Symfony\Component\HttpFoundation\Session */
         $session = $this->getRequest()->getSession();
-        $session_id = $session->getId();
+        //$session_id = $session->getId();
         /** @var $cart Cart */
-        $cart = $cart_manager->findOpenCartByOwner($session_id);
+        $cart = $cart_manager->findOpenCartByOwner($session);
 
         if (!$cart) {
             $cart = $cart_manager->createCart();
-            $cart->setOwner($session_id);
+            $cart->setOwner($session);
             return $cart;
         }
         return $cart;
