@@ -4,54 +4,54 @@
     <th class="image">
         {#{{'Image'|trans}}#}&nbsp;
     </th>
-    <th class="name">{{'Product'|trans}}</th>
-    <th class="item_price">{{'Item price'|trans}}</th>
-    <th class="quantity">{{'Quantity'|trans}}</th>
-    <th class="item_total_price">{{'Tot. price'|trans}}</th>
+    <th class="name">{{ 'Product'|trans }}</th>
+    <th class="item_price">{{ 'Item price'|trans }}</th>
+    <th class="quantity">{{ 'Quantity'|trans }}</th>
+    <th class="item_total_price">{{ 'Tot. price'|trans }}</th>
     <th class="x"></th>
     </thead>
     <tbody>
-    {% for item in cart.items%}
-    {% set product = item.cartableItem%}
-    {% set prod_url = path('shop_product',{'category_slug':product.categorySlug,'product_slug':product.slug}) %}
-    <tr class="product_{{product.id}}">
-        <td>
-            {{loop.index}}.
-        </td>
-        <td class="image">
-            <a href="{{prod_url}}">
-                <img src="{{product.previewImage.src|apply_filter('prod_preview_micro')}}"/>
-            </a>
-        </td>
-        <td>
-            <a href="{{prod_url}}">
-                {{product.name}}
-            </a>
-        </td>
-        <td class="item_price">
-            {{product.price}}
-        </td>
-        <td class="quantity">
-            <a href="#" title="-1" class="minus quantity_change">-</a>
-            <input class="plusminus quantity" name="quantity[{{product.id}}]" type="number"
-                   value="{{item.quantity}}"/>
-            <a href="#" title="+1" class="plus quantity_change">+</a>
-        </td>
-        <td class="item_total_price">
-            {{product.price*item.quantity|format}}
-        </td>
-        <td class="remove">
-            <a class="remove" href="{{path('shop_cart_remove',{'id':product.id})}}"><i
-                    class="icon-remove"></i> {{'remove'|trans}}</a>
-        </td>
-    </tr>
-    {% endfor%}
+    {% for item in cart.items %}
+        {% set product = item.product %}
+        {% set prod_url = path('shop_product',{'category_slug':product.categorySlug,'product_slug':product.slug}) %}
+        <tr class="product_{{ product.id }}">
+            <td>
+                {{ loop.index }}.
+            </td>
+            <td class="image">
+                <a href="{{ prod_url }}">
+                    <img src="{{ product.previewImage.src|apply_filter('prod_preview_micro') }}"/>
+                </a>
+            </td>
+            <td>
+                <a href="{{ prod_url }}">
+                    {{ product.name }}
+                </a>
+            </td>
+            <td class="item_price">
+                {{ product.price }}
+            </td>
+            <td class="quantity">
+                <a href="#" title="-1" class="minus quantity_change">-</a>
+                <input class="plusminus quantity" name="quantity[{{ product.id }}]" type="number"
+                       value="{{ item.quantity }}"/>
+                <a href="#" title="+1" class="plus quantity_change">+</a>
+            </td>
+            <td class="item_total_price">
+                {{ product.price*item.quantity|format }}
+            </td>
+            <td class="remove">
+                <a class="remove" href="{{ path('shop_cart_remove',{'id':product.id}) }}"><i
+                        class="icon-remove"></i> {{ 'remove'|trans }}</a>
+            </td>
+        </tr>
+    {% endfor %}
     </tbody>
     <tfoot>
     <tr>
         <td colspan="6" class="total_word">Итого:</td>
         <td class="total_amount">
-            {{cart.total}} <span class="curr">руб.</span>
+            {{ cart.total }} <span class="curr">руб.</span>
         </td>
     </tr>
     </tfoot>

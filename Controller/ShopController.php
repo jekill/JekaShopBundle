@@ -3,6 +3,7 @@
 namespace Jeka\ShopBundle\Controller;
 
 use \Application\Vespolina\CartBundle\Document\Cart;
+use Symfony\Component\HttpFoundation\Session\Session;
 use \Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,14 +31,14 @@ class ShopController extends Controller
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
         }
 
-        /** @var $cart_manager  \Vespolina\CartBundle\Document\CartManager*/
+        /** @var $cart_manager  \Application\Vespolina\CartBundle\Document\CartManager*/
         $cart_manager = $this->get('vespolina.cart_manager');
 
         if ($req->getMethod() == 'POST') {
 
             $cart = $this->getCart();
 
-            /** @var $cart_item \Vespolina\CartBundle\Document\CartItem */
+            /** @var $cart_item \Application\Vespolina\CartBundle\Document\CartItem */
             $cart_item = $cart_manager->createItem($product);
             $cart_item->setName($product->getName());
             $cart_item->setDescription($product->getDescription());
@@ -149,7 +150,7 @@ class ShopController extends Controller
         }
 
         $cart = $this->getCart();
-        $cart->removeCartableItemById($id);
+        $cart->removeProductById($id);
         /** @var $cart_manager \Vespolina\CartBundle\Document\CartManager */
         $cart_manager = $this->get('vespolina.cart_manager');
         $cart_manager->updateCart($cart);
@@ -370,18 +371,18 @@ class ShopController extends Controller
 
     public function getCart()
     {
-        /** @var $cart_manager  \Vespolina\CartBundle\Document\CartManager*/
+        /** @var $cart_manager  \Application\Vespolina\CartBundle\Document\CartManager*/
         $cart_manager = $this->get('vespolina.cart_manager');
 
-        /** @var $session \Symfony\Component\HttpFoundation\Session */
+
         $session = $this->getRequest()->getSession();
         //$session_id = $session->getId();
         /** @var $cart Cart */
-        $cart = $cart_manager->findOpenCartByOwner($session);
+        $cart = $cart_manager->findOpenCartByOwner($session->getId());
 
         if (!$cart) {
             $cart = $cart_manager->createCart();
-            $cart->setOwner($session);
+            $cart->setOwner($session->getId());
             return $cart;
         }
         return $cart;

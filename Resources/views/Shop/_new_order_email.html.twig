@@ -43,7 +43,7 @@
     </thead>
     <tbody>
     {% for item in cart.items%}
-    {% set product = item.cartableItem%}
+    {% set product = item.product%}
     {% set prod_url = url('shop_product',{'category_slug':product.categorySlug,'product_slug':product.slug}) %}
     <tr class="product_{{product.id}}">
         <td>
