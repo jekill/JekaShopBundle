@@ -5,7 +5,7 @@
         {{'cart.quantity'|trans}}: <span class="cart_quantity">{{cart.totalQuantity}}</span>
     </div>
     <div class="amount">
-        {{'cart.amount'|trans}}: <span class="cart_amount">{{cart.totalPrice}}</span> <span class="curr">руб.</span>
+        {{'cart.amount'|trans}}: <span class="cart_amount">{{cart.total}}</span> <span class="curr">руб.</span>
     </div>
     <div class="checkout">
         <a onclick="return !$(this).hasClass('disabled');" class="{{cart.items|length==0?'disabled':''}}" href="{{path('shop_cart')}}">{{'cart.checkout'|trans}}</a>
