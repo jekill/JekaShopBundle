@@ -27,6 +27,7 @@ class ProductManager extends BaseManager
     public function createQueryFindProductsByCategories($categories = array())
     {
         $ids = array();
+
         foreach ($categories as $c) {
             //print get_class($c)."<br/>";
             //$ids[] = $this->dm->createDBRef($c);

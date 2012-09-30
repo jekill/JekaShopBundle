@@ -8,6 +8,7 @@
         <parameter key="jeka_shop.shop_settings_extension.class">Jeka\ShopBundle\Twig\ShopSettingsExtension</parameter>
         <parameter key="jeka_shop.shop_settings.class">Jeka\ShopBundle\Model\ShopSettings</parameter>
         <parameter key="jeka_shop.mail_former.class">Jeka\ShopBundle\Mail\MailFormer</parameter>
+        <parameter key="jeka.shop_exporter.yandex_yml.class">Jeka\ShopBundle\Export\YandexYMLBuilder</parameter>
 
     </parameters>
 
@@ -29,6 +30,13 @@
             <argument>%jeka_shop.feedback%</argument>
         </service>
 
+        <service id="jeka.shop_exporter.yandex_yml" class="%jeka.shop_exporter.yandex_yml.class%">
+            <argument type="service" id="jeka.yandex_yml.document"/>
+            <argument type="service" id="vespolina.product_manager"/>
+            <argument type="service" id="jeka.category_manager"/>
+            <argument type="service" id="router"/>
+            <argument>%jeka.shop_exporter.exclude_categories%</argument>
+        </service>
 
     </services>
 
