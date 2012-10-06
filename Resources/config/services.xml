@@ -1,15 +1,16 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
         <parameter key="jeka_shop.shop_settings_extension.class">Jeka\ShopBundle\Twig\ShopSettingsExtension</parameter>
         <parameter key="jeka_shop.shop_settings.class">Jeka\ShopBundle\Model\ShopSettings</parameter>
         <parameter key="jeka_shop.mail_former.class">Jeka\ShopBundle\Mail\MailFormer</parameter>
         <parameter key="jeka.shop_exporter.yandex_yml.class">Jeka\ShopBundle\Export\YandexYMLBuilder</parameter>
-
+        <parameter key="jeka_shop.counter.class">Jeka\ShopBundle\Document\Counter</parameter>
+        <parameter key="jeka_shop.counter_manager.class">Jeka\ShopBundle\Document\CounterManager</parameter>
     </parameters>
 
 
@@ -20,7 +21,7 @@
 
         <service id="twig.extension.shop_settings" class="%jeka_shop.shop_settings_extension.class%">
             <argument type="service" id="jeka.shop_settings"/>
-            <tag name="twig.extension" />
+            <tag name="twig.extension"/>
         </service>
 
         <service id="jeka.mail_former" class="%jeka_shop.mail_former.class%">
@@ -35,7 +36,13 @@
             <argument type="service" id="vespolina.product_manager"/>
             <argument type="service" id="jeka.category_manager"/>
             <argument type="service" id="router"/>
+            <argument type="service" id="jeka.counter_manager"/>
             <argument>%jeka.shop_exporter.exclude_categories%</argument>
+        </service>
+        <service id="jeka.counter_manager" class="%jeka_shop.counter_manager.class%">
+            <argument>%jeka_shop.counter.class%</argument>
+            <argument type="service" id="doctrine.odm.mongodb.document_manager"/>
+
         </service>
 
     </services>

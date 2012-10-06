@@ -3,6 +3,7 @@
 namespace Jeka\ShopBundle\Export;
 
 use Jeka\YandexYMLBundle\YandexYML\Document;
+use Jeka\ShopBundle\Document\CounterManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Jeka\YandexYMLBundle\YandexYML\Offer\Model;
 use Jeka\YandexYMLBundle\YandexYML\Offer\AbstractOffer;
@@ -27,12 +28,14 @@ class YandexYMLBuilder
     /** @var Product */
     private $deliveryProduct;
     private $router;
+    private $counterManager;
 
     public function __construct(
         Document $ymlDocument,
         ProductManager $productManager,
         CategoryManager $categoryManager,
         Router $router,
+        CounterManager $counterManager,
         array $excludeCategories = array()
     ) {
         $this->ymlDocument       = $ymlDocument;
@@ -41,6 +44,7 @@ class YandexYMLBuilder
         $this->router            = $router;
         $this->excludeCategories = $excludeCategories;
         $this->deliveryProduct   = $this->productManager->findBySlug('courier-delivery');
+        $this->counterManager    = $counterManager;
     }
 
 
@@ -50,6 +54,11 @@ class YandexYMLBuilder
         $prodCategories = array();
         /** @var $c Category*/
         foreach ($categories as $c) {
+            if (!$c->getNumber()) {
+                $number = $this->counterManager->createNextValueFor('category');
+                $c->setNumber($number);
+                $this->categoryManager->updateCategory($c,false);
+            }
             if ($c->getSlug() == 'root' || in_array($c->getSlug(), $this->excludeCategories)) {
                 continue;
             }
@@ -58,7 +67,7 @@ class YandexYMLBuilder
         }
 
         $prodQuery = $this->productManager->createQueryFindProductsByCategories($prodCategories);
-        $products = $prodQuery->getQuery()->execute();
+        $products  = $prodQuery->getQuery()->execute();
 
         /** @var $p Product */
         foreach ($products as $p) {
@@ -67,6 +76,7 @@ class YandexYMLBuilder
         }
 
         $this->ymlDocument->generateYML();
+        $this->categoryManager->flushManager();
     }
 
     /**
@@ -76,7 +86,7 @@ class YandexYMLBuilder
     public function convertCategory2YMLCategory(Category $category)
     {
         $parentId    = $category->getParent() && $category->getParent()->getSlug() != 'root' ? $category->getParent()->getId() : null;
-        $ymlCategory = new YmlCategory($category->getId(), $category->getName(), $parentId);
+        $ymlCategory = new YmlCategory($category->getNumber(), $category->getName(), $parentId);
 
         return $ymlCategory;
     }
@@ -95,13 +105,14 @@ class YandexYMLBuilder
      */
     private function convertProduct2YMLOffer(Product $product)
     {
-        $offer               = new Model($product->getId(), !$product->getDisabled());
+        $offer = new Model($product->getId(), !$product->getDisabled());
+
         $offer->categoryId   = $product->getFirstCategory()->getId();
         $offer->currencyId   = 'RUR';
         $offer->delivery     = true;
         $offer->description  = $product->getDescription();
         $offer->downloadable = false;
-        $offer->price = $product->getPrice();
+        $offer->price        = $product->getPrice();
 
         if (in_array(date('N'), array(6, 7))) {
             $offer->local_delivery_cost = 0;
@@ -135,7 +146,5 @@ class YandexYMLBuilder
         );
 
         return $offer;
-        //$ymlOffer->country_of_origin
-        //$product->getFeature();
     }
 }
