@@ -112,7 +112,7 @@ class YandexYMLBuilder
     {
         $offer = new Model($product->getNumber(), !$product->getDisabled());
 
-        $offer->categoryId   = $product->getFirstCategory()->getId();
+        $offer->categoryId   = $product->getFirstCategory()->getNumber();
         $offer->currencyId   = 'RUR';
         $offer->delivery     = true;
         $offer->description  = $product->getDescription();
