@@ -71,12 +71,17 @@ class YandexYMLBuilder
 
         /** @var $p Product */
         foreach ($products as $p) {
+            if (!$p->getNumber()){
+                $p->setNumber($this->counterManager->createNextValueFor('product'));
+                $this->productManager->updateProduct($p,false);
+            }
             $ymlProduct = $this->convertProduct2YMLOffer($p);
             $this->ymlDocument->addOffer($ymlProduct);
         }
 
         $this->ymlDocument->generateYML();
         $this->categoryManager->flushManager();
+
     }
 
     /**
@@ -105,7 +110,7 @@ class YandexYMLBuilder
      */
     private function convertProduct2YMLOffer(Product $product)
     {
-        $offer = new Model($product->getId(), !$product->getDisabled());
+        $offer = new Model($product->getNumber(), !$product->getDisabled());
 
         $offer->categoryId   = $product->getFirstCategory()->getId();
         $offer->currencyId   = 'RUR';
