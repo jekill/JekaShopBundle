@@ -90,7 +90,7 @@ class YandexYMLBuilder
      */
     public function convertCategory2YMLCategory(Category $category)
     {
-        $parentId    = $category->getParent() && $category->getParent()->getSlug() != 'root' ? $category->getParent()->getId() : null;
+        $parentId    = $category->getParent() && $category->getParent()->getSlug() != 'root' ? $category->getParent()->getNumber() : null;
         $ymlCategory = new YmlCategory($category->getNumber(), $category->getName(), $parentId);
 
         return $ymlCategory;
@@ -112,7 +112,7 @@ class YandexYMLBuilder
     {
         $offer = new Model($product->getNumber(), !$product->getDisabled());
 
-        $offer->categoryId   = $product->getFirstCategory()->getId();
+        $offer->categoryId   = $product->getFirstCategory()->getNumber();
         $offer->currencyId   = 'RUR';
         $offer->delivery     = true;
         $offer->description  = $product->getDescription();
